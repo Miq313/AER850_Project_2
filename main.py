@@ -1,10 +1,10 @@
-import tensorflow as tf
-from keras.preprocessing.image import ImageDataGenerator
 
+from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from keras.utils import image_dataset_from_directory
 from keras.optimizers import Adam
+import matplotlib.pyplot as plt
 
 ############################################################
 ################# Step 1: Data Processing ##################
@@ -89,19 +89,59 @@ model.add(Dropout(0.5))
 model.add(Dense(4, activation='softmax'))
 
 ############################################################
-############# Network Hyperparameter Analysis ##############
+######### Step 3: Network Hyperparameter Analysis ##########
 ############################################################
 
-# Experiment with hyperparameters
+# Experimenting with hyperparameters
 activation_conv = 'relu'
 activation_dense = 'relu'  # or 'elu'
 filters = 64  # (32, 64, 128, etc.)
 neurons_dense = 128  #  (32, 64, 128, etc.)
 
-# Compile the model with hyperparameters
+# Compiling the model with hyperparameters
 model.compile(optimizer=Adam(), 
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 # Display the summary of the model architecture
 model.summary()
+
+############################################################
+################# Step 4: Model Evaluation #################
+############################################################
+
+# Training
+history = model.fit(
+    train_dataset,
+    epochs=10,
+    validation_data=validation_dataset
+)
+
+test_loss, test_accuracy = model.evaluate(test_dataset)
+
+print(f'Test Loss: {test_loss:.4f}')
+print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
+
+# Plotting training history (loss and accuracy over epochs)
+plt.figure(figsize=(12, 4))
+
+# Plotting training & validation loss values
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend(['Train', 'Validation'], loc='upper right')
+
+# Plotting training & validation accuracy values
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend(['Train', 'Validation'], loc='lower right')
+
+plt.tight_layout()
+plt.show()
