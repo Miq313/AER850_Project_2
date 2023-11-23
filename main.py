@@ -3,7 +3,7 @@ from keras.preprocessing.image import ImageDataGenerator
 
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-
+from keras.utils import image_dataset_from_directory
 from keras.optimizers import Adam
 
 ############################################################
@@ -19,7 +19,7 @@ validation_data_dir = './Data/Validation'
 test_data_dir = './Data/Test'
 
 # Setting up data augmentation for training data
-train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+train_datagen = ImageDataGenerator(
     rescale=1./255,
     shear_range=0.2,
     zoom_range=0.2,
@@ -27,14 +27,14 @@ train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 )
 
 # Rescaling validation and test data
-validation_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
-test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
+validation_datagen = ImageDataGenerator(rescale=1./255)
+test_datagen = ImageDataGenerator(rescale=1./255)
 
 # Setting up train, validation, and test datasets using image_dataset_from_directory
 batch_size = 32
 
 # Train dataset
-train_dataset = tf.keras.utils.image_dataset_from_directory(
+train_dataset = image_dataset_from_directory(
     train_data_dir,
     image_size=input_shape[:2],
     batch_size=batch_size,
@@ -42,7 +42,7 @@ train_dataset = tf.keras.utils.image_dataset_from_directory(
 )
 
 # Validation dataset
-validation_dataset = tf.keras.utils.image_dataset_from_directory(
+validation_dataset = image_dataset_from_directory(
     validation_data_dir,
     image_size=input_shape[:2],
     batch_size=batch_size,
@@ -50,7 +50,7 @@ validation_dataset = tf.keras.utils.image_dataset_from_directory(
 )
 
 # Test dataset
-test_dataset = tf.keras.utils.image_dataset_from_directory(
+test_dataset = image_dataset_from_directory(
     test_data_dir,
     image_size=input_shape[:2],
     batch_size=batch_size,
