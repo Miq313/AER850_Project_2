@@ -65,27 +65,29 @@ test_dataset = image_dataset_from_directory(
 # Creating a Sequential model
 model = Sequential()
 
-# Convolutional layers with LeakyReLU activation
-model.add(Conv2D(32, (3, 3), activation='LeakyReLU', input_shape=input_shape))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(256, 2, strides=(1, 1), activation='relu', input_shape=(100, 100, 3)))
+model.add(MaxPooling2D())
+model.add(Dropout(0.2))
 
-model.add(Conv2D(64, (3, 3), activation='LeakyReLU'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(128, (3, 3), activation='LeakyReLU'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-# Flattening layer to transition from convolutional to fully connected layers
-model.add(Flatten())
-
-# Fully connected layers with ReLU activation
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.5))  # Optional dropout for regularization
-
-model.add(Dense(128, activation='relu'))
+model.add(Conv2D(64, 2, strides=(1, 1), activation='relu'))
+model.add(MaxPooling2D())
 model.add(Dropout(0.5))
 
-# Output layer with 4 neurons (one for each class) and softmax activation for multi-class classification
+model.add(Conv2D(64, 4, activation='relu')),  # Changed activation to 'relu
+model.add(MaxPooling2D())
+model.add(Dropout(0.35))
+
+model.add(Conv2D(64, 3, activation='relu'))
+model.add(MaxPooling2D())
+model.add(Dropout(0.5))
+
+model.add(Conv2D(64, 3, activation='relu'))
+model.add(MaxPooling2D())
+
+model.add(Flatten())
+model.add(Dense(256, activation='elu'))
+model.add(Dropout(0.5))
+
 model.add(Dense(4, activation='softmax'))
 
 ############################################################
